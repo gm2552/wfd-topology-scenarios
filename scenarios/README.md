@@ -5,7 +5,8 @@ resources are scenario specific and apply environment values to the workload dep
 
 Sub folders contain deployment configuration for various deployment topologies.  These include:
 
-- [Single Cluster](single-cluster/README.md)
+- [Single Cluster, No HA](single-cluster-no-ha/README.md)
+- [Single Cluster, HA Services](single-cluster-ha-services/README.md)
 - [Multiple Clusters/Single Regions](multi-cluster-single-region/README.md)
 
 See the READMEs in each scenario folder for specific deployment instructions.

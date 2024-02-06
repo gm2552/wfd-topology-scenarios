@@ -1,4 +1,4 @@
-# Single Cluster Topology Scenario
+# Single Cluster, No HA Topology Scenario
 
 This scenario consists of a single run cluster with services running locally on the cluster using bitnami services.
 
