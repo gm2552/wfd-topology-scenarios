@@ -1,0 +1,14 @@
+apiVersion: "tanzu.vmware.com/v1"
+kind: SpringCloudGateway
+metadata:
+  name: spring-cloud-gateway
+spec:
+  service:
+    type: ClusterIP
+  api:
+    version: 1.0.0
+    groupId: where-for-dinner    
+  env:
+    - name: spring.cloud.gateway.httpclient.connect-timeout
+      value: "90"
+
