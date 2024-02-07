@@ -1,13 +1,10 @@
 ---
-apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-kind: ClassClaim
+apiVersion: bitnami.messaging.tanzu.vmware.com/v1alpha1
+kind: RabbitmqCluster
 metadata:
   name: msgbroker-where-for-dinner
 spec:
-  classRef:
-    name: rabbitmq-unmanaged
-  parameters:
-    replicas: 1
+  replicas: 1
 ---
 apiVersion: services.apps.tanzu.vmware.com/v1alpha1
 kind: ResourceClaim
@@ -15,17 +12,16 @@ metadata:
   name: msgbroker-where-for-dinner
 spec:
   ref:
-    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-    kind: ClassClaim
+    apiVersion: bitnami.messaging.tanzu.vmware.com/v1alpha1
+    kind: RabbitmqCluster
     name: msgbroker-where-for-dinner
 ---
-apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-kind: ClassClaim
+apiVersion: bitnami.database.tanzu.vmware.com/v1alpha1
+kind: PostgreSQLInstance
 metadata:
   name: db-where-for-dinner
 spec:
-  classRef:
-    name: postgresql-unmanaged
+  storageGB: 1
 ---
 apiVersion: services.apps.tanzu.vmware.com/v1alpha1
 kind: ResourceClaim
@@ -33,17 +29,16 @@ metadata:
   name: db-where-for-dinner
 spec:
   ref:
-    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-    kind: ClassClaim
+    apiVersion: bitnami.database.tanzu.vmware.com/v1alpha1
+    kind: PostgreSQLInstance
     name: db-where-for-dinner
 ---
-apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-kind: ClassClaim
+apiVersion: bitnami.caching.tanzu.vmware.com/v1alpha1
+kind: RedisCluster
 metadata:
   name: cache-where-for-dinner
 spec:
-  classRef:
-    name: redis-unmanaged
+  storageGB: 1
 ---
 apiVersion: services.apps.tanzu.vmware.com/v1alpha1
 kind: ResourceClaim
@@ -51,6 +46,6 @@ metadata:
   name: cache-where-for-dinner
 spec:
   ref:
-    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-    kind: ClassClaim
+    apiVersion: bitnami.caching.tanzu.vmware.com/v1alpha1
+    kind: RedisCluster
     name: cache-where-for-dinner
