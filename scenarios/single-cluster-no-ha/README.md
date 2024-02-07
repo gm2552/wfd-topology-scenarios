@@ -25,8 +25,8 @@ kubectl apply -f single-cluster/services.yaml
 kubectl apply -f single-cluster/package-install/
 ```
 
-If you are targeting a Kubernetes cluster directory, first edit the `single-cluster/ingress.yaml` file and replace the text `<UPDATE ME>` with the full
-<host>.<domain> name of the application.  Eg: `where-for-dinner.perfect300rock.com`
+If you are targeting a Kubernetes cluster directory, first edit the `single-cluster/ingress.yaml` file and replace the text `<UPDATE ME>` with the full `<host>.<domain>` 
+name of the application.  Eg: `where-for-dinner.perfect300rock.com`
 
 use the following commands:
 
