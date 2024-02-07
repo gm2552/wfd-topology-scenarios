@@ -14,7 +14,7 @@ metadata:
 spec:
   env:
   - name: spring_profiles_active
-    value: mysql,rabbitmq
+    value: postgres,rabbitmq
   build:
     env:
     - name: BP_JVM_VERSION
@@ -183,7 +183,7 @@ spec:
       value: streams
   env:
   - name: spring_profiles_active
-    value: mysql,rabbitmq
+    value: postgres,rabbitmq
   params:
   - name: ports
     value:

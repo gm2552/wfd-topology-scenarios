@@ -11,7 +11,7 @@ spec:
     spec:
       fetch:
       - imgpkgBundle:
-          image: reg.perfect300rock.com/tapdev/supply-chain/where-for-dinner-availability-workloads-bundle@sha256:0167c63899b29e86377104eb5cd86161f431538c92b751a286805a33eb45165b
+          image: reg.perfect300rock.com/tapdev/supply-chain/where-for-dinner-availability-workloads-bundle@sha256:7fe9e66aa7edb1339055161954668beb6b1e041457abaa97fe87b7b7118fe876
       template:
       - ytt:
           paths:

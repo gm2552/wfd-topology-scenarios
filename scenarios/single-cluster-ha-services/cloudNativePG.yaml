@@ -1,0 +1,74 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cnpg-where-for-dinner
+spec:
+  instances: 3
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 1Gi
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretTemplate
+metadata:
+ name: cnpg-where-for-dinner-db-secret
+spec:
+ serviceAccountName: default
+ inputResources:
+ - name: creds
+   ref:
+     apiVersion: v1
+     kind: Secret
+     name: cnpg-where-for-dinner-app
+ template:
+  metadata:
+   labels:
+     app.kubernetes.io/component: cnpg
+     app.kubernetes.io/instance: cnpg-where-for-dinner
+     services.apps.tanzu.vmware.com/class: cnpg-cluster
+  stringData:
+    provider: cloudnative-pg
+    type: postgresql
+  data:
+    password: $(.creds.data.password)
+    username: $(.creds.data.user)
+    host: $(.creds.data.host)
+    port: $(.creds.data.port)    
+    database: $(.creds.data.dbname)
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cndb-secret-template-reader
+rules:
+- apiGroups:
+  - "*"
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cndb-secret-template-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cndb-secret-template-reader
+subjects:
+- kind: ServiceAccount
+  name: default
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: db-where-for-dinner
+spec:
+  ref:
+    apiVersion: v1
+    kind: Secret
+    name: cnpg-where-for-dinner-db-secret 

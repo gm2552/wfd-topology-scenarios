@@ -4,7 +4,7 @@ metadata:
   name: where-for-dinner-ingress
 spec:
   virtualhost:
-    fqdn: <UPDATE ME>
+    fqdn: where-for-dinner.perfect300rock.com
   routes:
     - conditions:
         - prefix: /

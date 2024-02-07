@@ -73,7 +73,7 @@ spec:
     tags:
     - search-api 
   service:
-    name: availability
+    name: where-for-dinner-availability
 ---
 apiVersion: "tanzu.vmware.com/v1"
 kind: SpringCloudGatewayMapping

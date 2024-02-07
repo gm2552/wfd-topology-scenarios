@@ -25,7 +25,7 @@ metadata:
   name: db-where-for-dinner
 spec:
   classRef:
-    name: mysql-unmanaged
+    name: postgresql-unmanaged
 ---
 apiVersion: services.apps.tanzu.vmware.com/v1alpha1
 kind: ResourceClaim

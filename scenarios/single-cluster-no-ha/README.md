@@ -19,8 +19,8 @@ If you are targeting a Space, use the following commands:
 
 ```
 kubectl apply -f packages/
-kubectl apply -f single-cluster/k8sGatewayRoutes.yaml
-kubectl apply -f single-cluster/scgRoutes.yaml
+kubectl apply -f common-config/k8sGatewayRoutes.yaml
+kubectl apply -f common-config/scgRoutes.yaml
 kubectl apply -f single-cluster/services.yaml
 kubectl apply -f single-cluster/package-install/
 ```
@@ -32,9 +32,9 @@ use the following commands:
 
 ```
 kubectl apply -f packages/ -n <namespace>
-kubectl apply -f single-cluster/scgInstance.yaml -n <namespace>
-kubectl apply -f single-cluster/scgRoutes.yaml -n <namespace>
-kubectl apply -f single-cluster/ingress.yaml -n <namespace>
-kubectl apply -f single-cluster/services.yaml -n <namespace>
-kubectl apply -f single-cluster/package-install/ -n <namespace>
+kubectl apply -f common-config/scgInstance.yaml -n <namespace>
+kubectl apply -f common-config/scgRoutes.yaml -n <namespace>
+kubectl apply -f common-config/ingress.yaml -n <namespace>
+kubectl apply -f single-cluster-no-ha/services.yaml -n <namespace>
+kubectl apply -f single-cluster-no-ha/package-install/ -n <namespace>
 ```

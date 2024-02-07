@@ -2,7 +2,7 @@
 
 This repository outlines several deployment topology scenarios for the Where For Dinner application.  It uses a common build configuration which references the 
 main Where For Dinner source  location in the [sample accelerators repository](https://github.com/vmware-tanzu/application-accelerator-samples/tree/main/where-for-dinner).
-The configuration uses deployed instances of RabbitMQ, MySQL, and Redit and uses ResourceClaims to reference the provisioned services (could be a direct
+The configuration uses deployed instances of RabbitMQ, PostgreSQL, and Redit and uses ResourceClaims to reference the provisioned services (could be a direct
 secret reference as well).
 
 This project is separated into two sections: build and deploy.  The build generates Carvel packages that will be deployed into the run clusters of the various
