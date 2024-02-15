@@ -45,3 +45,5 @@ Each one of the sub scenarios should be considered a unique deployment of the wh
 
 
 - [Automatic HA Failover, Network Service Names](auto-failover-network-names.md)
+- [Automatic HA Failover, Service Proxy](auto-failover-service-proxy.md)
+

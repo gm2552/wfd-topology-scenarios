@@ -1,0 +1,17 @@
+---
+apiVersion: bitnami.database.tanzu.vmware.com/v1alpha1
+kind: PostgreSQLInstance
+metadata:
+  name: db-where-for-dinner
+spec:
+  storageGB: 1
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: db-where-for-dinner
+spec:
+  ref:
+    apiVersion: bitnami.database.tanzu.vmware.com/v1alpha1
+    kind: PostgreSQLInstance
+    name: db-where-for-dinner
