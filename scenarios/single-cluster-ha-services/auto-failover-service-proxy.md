@@ -1,4 +1,4 @@
-# Automatic HA Failover, Service PRoxy
+# Automatic HA Failover, Service Proxy
 
 This scenario implements of an automatic database failover use case that uses an RDS Postgres Multi-AZ DB cluster along with an RDS Proxy.  Workloads are
 configured with a single connection point: the RDS Proxy read/write endpoint.  When a failover is detected, RDS automatically promotes one of the read only replicas to
