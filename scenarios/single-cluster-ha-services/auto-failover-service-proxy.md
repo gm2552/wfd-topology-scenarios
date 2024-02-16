@@ -24,15 +24,15 @@ you can disable backups as well if you wish. Finally, click `Create database`.
 After the database has been created and is available, click on the database instance from the list of databases and scroll down to the "Proxies" section. 
 Click on the `Proxy identifier` and scroll down to the `Proxy endpoints` section.  Note the endpoint this will be used as the host field in the next section.
 
-Using your editor of choice, update the fields with <> placeholders in the `amazonMQ.yaml` file in the `scenarios/single-cluster-ha-services` folder
+Using your editor of choice, update the fields with <> placeholders in the `amazonRDS.yaml` file in the `scenarios/single-cluster-ha-services` folder
 of this repository with the credentials and connection information for the Postgres proxy. You will need to base64 encode each secret/credential value 
-before adding it to the `amazonMQ.yaml` file; an easy way to base64 values is to use an online tool such as https://www.base64encode.org.
+before adding it to the `amazonRDS.yaml` file; an easy way to base64 values is to use an online tool such as https://www.base64encode.org.
 
 Finally, apply the credential information to the cluster by running the following 
 command from the root of the `scenarios` directory substituting the <namepspace> placeholder with your run namespace (if applicable):
 
 ```
-kubectl apply -f single-cluster-ha-services/amazonMQ.yaml -n <namespace>
+kubectl apply -f single-cluster-ha-services/amazonRDS.yaml -n <namespace>
 ```
 
 ### Create Remaining Services

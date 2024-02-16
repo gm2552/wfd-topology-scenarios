@@ -27,7 +27,7 @@ kubectl apply -f common-config/k8sGatewayRoutes.yaml
 kubectl apply -f common-config/scgRoutes.yaml
 ```
 
-If you are targeting a Kubernetes cluster directory, first edit the `single-cluster/ingress.yaml` file and replace the text `<UPDATE ME>` with the full `<host>.<domain>` 
+If you are targeting a Kubernetes cluster directory, first edit the `common-config/ingress.yaml` file and replace the text `<UPDATE ME>` with the full `<host>.<domain>` 
 name of the application.  Eg: `where-for-dinner.perfect300rock.com`
 
 use the following commands:

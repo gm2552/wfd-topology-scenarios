@@ -1,0 +1,17 @@
+---
+apiVersion: bitnami.messaging.tanzu.vmware.com/v1alpha1
+kind: RabbitmqCluster
+metadata:
+  name: msgbroker-where-for-dinner
+spec:
+  replicas: 1
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: msgbroker-where-for-dinner
+spec:
+  ref:
+    apiVersion: bitnami.messaging.tanzu.vmware.com/v1alpha1
+    kind: RabbitmqCluster
+    name: msgbroker-where-for-dinner

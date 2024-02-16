@@ -7,7 +7,7 @@ Sub folders contain deployment configuration for various deployment topologies. 
 
 - [Single Cluster, No HA](single-cluster-no-ha/README.md)
 - [Single Cluster, HA Services](single-cluster-ha-services/README.md)
-- [Multiple Clusters/Single Regions](multi-cluster-single-region/README.md)
+- [Multi-Region, Active/Passive](multi-region-active-passive/README.md)
 
 See the READMEs in each scenario folder for specific deployment instructions.
 
