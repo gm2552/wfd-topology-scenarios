@@ -186,5 +186,5 @@ of the following:
 - Switch GSLB to point to route traffic to the passive cluster
 - Test the WFD application.
 
-*Test Tests Coming Soon*
+*Test Steps Coming Soon*
 
