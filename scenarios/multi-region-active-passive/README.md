@@ -52,15 +52,18 @@ passive region.  Make sure you are in the correct region when you perform the op
 
 #### Postgres Service Creation
 
-To create a primary Postgres cluster, search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 
-Click the `Create database` button, select `Standard create`, and select `Aurora (PosgreSQL Compatible)`; do NOT select PostgreSQL option.
-Select "Dev/Test" as the template.
-Give the `DB cluster identifier` a name of your choice, and supply a master username and password in `Credential Settings`. 
-For "Instance configuration", select a size in the `Memory optimized classes` class; `db.r5.large` is appropriate. 
-Under `Availability & durability`, select `Create an Aurora Replica or Reader node in a different AZ.`
-Under `Connectivity`, chose `Yes` for `Public access`.  
-You can turn off performance insights under `Monitoring` if you wish. Under `Additional configuration`, provide an `Initial database name` such as `dinner`; 
-you can disable backups as well if you wish. Finally, click `Create database`.
+To create a primary Postgres cluster:
+- search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 
+- Click the `Create database` button, select `Standard create`, and select `Aurora (PosgreSQL Compatible)`; do NOT select PostgreSQL option.
+- Select "Dev/Test" as the template.
+- Give the `DB cluster identifier` a name of your choice, and supply a master username and password in `Credential Settings`. 
+- For "Instance configuration", select a size in the `Memory optimized classes` class; `db.r5.large` is appropriate. 
+- Under `Availability & durability`, select `Create an Aurora Replica or Reader node in a different AZ.`
+- Under `Connectivity`, chose `Yes` for `Public access`.  
+- You can turn off performance insights under `Monitoring` if you wish. 
+- Under `Additional configuration`, provide an `Initial database name` such as `dinner`; 
+- You can disable backups as well if you wish. Finally, 
+- Click `Create database`.
 
 Using your editor of choice, update the fields with <> placeholders in the `amazonAuroraPrimary.yaml` file in the `scenarios/multi-region-active-passive` folder
 of this repository with the credentials and connection information for the Postgres primary cluster. You will need to base64 encode each secret/credential value 
@@ -70,15 +73,20 @@ After the primary cluster is available, go back to the RDS databases list and cl
 section and make note of the endpoint with the type `writer` as this will be host field in your credentials file for the primary region.
 
 
-To create the secondary cluster, select the primary database cluster from the database list in the AWS console (this should be the cluster you just created).
-Click on the `Actions` drop down and then click `Add AWS region.`  Enter a name of your choice for the `Global database identifier` and then choose the region where your
-passive/standby clusters are located.   For "Instance configuration", select a size in the `Memory optimized classes` class; `db.r5.large` is appropriate. 
-Under `Availability & durability`, select `Create an Aurora Replica or Reader node in a different AZ.`  Under `Connectivity`, chose `Yes` for `Public access`.  
-Under `Additional configuration`, provide an `Initial database name` such as `dinner`; you can turn off performance insights and backups as well if you wish.
-Finally, click `Add region`.
+To create the secondary cluster: 
+- Select the primary database cluster from the database list in the AWS console (this should be the cluster you just created).
+- Click on the `Actions` drop down and then click `Add AWS region.`  
+- Enter a name of your choice for the `Global database identifier` and then choose the region where your
+passive/standby clusters are located.   
+- For `Instance configuration`, select a size in the `Memory optimized classes` class; `db.r5.large` is appropriate. 
+- Under `Availability & durability`, select `Create an Aurora Replica or Reader node in a different AZ.`  
+- Under `Connectivity`, chose `Yes` for `Public access`.  
+- Under `Additional configuration`, provide an `Initial database name` such as `dinner`
+- You can turn off performance insights and backups as well if you wish.
+- Finally, click `Add region`.
 
-After the secondary cluster is available, go back to the RDS databases and list click on the DB identifier that has a role of `Secondard Cluster`.  Scroll down the `Endpoints`
-section and make note of the endpoint with the type `writer` as this will be host field in your credentials file for the secondary region.
+After the secondary cluster is available, go back to the RDS databases and list click on the DB identifier that has a role of `Secondard Cluster`.  
+- Scroll down the `Endpoints` section and make note of the endpoint with the type `writer` as this will be host field in your credentials file for the secondary region.
 
 Using your editor of choice, update the fields with <> placeholders in the `amazonAuroraSecondary.yaml` file in the `scenarios/multi-region-active-passive` folder
 of this repository with the credentials and connection information for the Postgres primary cluster. You will need to base64 encode each secret/credential value 
@@ -106,31 +114,36 @@ kubectl apply -f multi-region-active-passive/amazonAuroraSecondary.yaml -n <name
 
 #### Redis Service Creation
 
-To create a Redis Global Datastore instance, search for ElastiCache in the AWS Web Console and click `ElastiCache` to load the Amazon ElastiCache dashboard. 
-Click `Global datastores` on the left side navigation menu,  then click the  `Create global datastore` button.
-Select `Disabled` to create a simple single shard node group and then enter a name of your choosing for the Global Datastore info `name` field.
-In the `Region cluster` section, select the region where your primary/active clusters are located and enter a name of your choosing in the Cluster Info
+To create a Redis Global Datastore instance, 
+- Search for ElastiCache in the AWS Web Console and click `ElastiCache` to load the Amazon ElastiCache dashboard. 
+- Click `Global datastores` on the left side navigation menu,  then click the  `Create global datastore` button.
+- Select `Disabled` to create a simple single shard node group and then enter a name of your choosing for the Global Datastore info `name` field.
+- In the `Region cluster` section, select the region where your primary/active clusters are located and enter a name of your choosing in the Cluster Info
 `name` field.
-In the `Cluster settings` section, select a smaller node type: `cache.r7g.large` is an appropriate setting.
-In the `Connectivity section` select an existing subnet group or create a new one if one does not already exist and give it a name of your choosing.  
-Ensure that the VPC is the same VPC where your clusters reside.  You may need to create a new subnet group if the desired VPC is not listed.  Then click `next.`
-In the `security` section, select enabled for both `Encyrption at rest` and `Encrption in transit`.  For `access control` choose `Redis Auth default user access` and enter
-in an appropriate password; you will need this password later on when filling out the `password` field of the secrets.
-In the `Selected security groups`, select a an existing security group; you may need to later update the inbound traffic rules to allow inbound traffic on port 6379.
-Click `next`
-In the `Regional cluster`, select the region where your standby/passive clusters are located.  Enter a name of your choosing in the Cluster Info
+- In the `Cluster settings` section, select a smaller node type: `cache.r7g.large` is an appropriate setting.
+- In the `Connectivity section` select an existing subnet group or create a new one if one does not already exist and give it a name of your choosing.  
+- Ensure that the VPC is the same VPC where your clusters reside.  You may need to create a new subnet group if the desired VPC is not listed.  Then click `next.`
+- In the `security` section, select enabled for both `Encyrption at rest` and `Encrption in transit`.  
+  - For `access control` choose `Redis Auth default user access` and entering an appropriate password; you will need this password later on when filling out the `password` field of the secrets.
+- In the `Selected security groups`, select a an existing security group; you may need to later update the inbound traffic rules to allow inbound traffic on port 6379.
+- Click `next`
+- In the `Regional cluster`, select the region where your standby/passive clusters are located.  Enter a name of your choosing in the Cluster Info
 `name` field.
-In the `Connectivity section` select an existing subnet group or create a new one if one does not already exist and give it a name of your choosing.
-Select the VPC where your workloads will run.  Click `next`
-In the `security` section, select enabled for both `Encyrption at rest` and `Encrption in transit`.  For `access control` choose `Redis Auth default user access` and enter
-in an appropriate password; this should be the same password that you used in the primary region.
-In the `Selected security groups`, select a an existing security group; you may need to later update the inbound traffic rules to allow inbound traffic on port 6379.
-You can disable backups if you wish.  Click `next` then hit `create`.
+- In the `Connectivity section` select an existing subnet group or create a new one if one does not already exist and give it a name of your choosing.
+- Select the VPC where your workloads will run.  Click `next`
+- In the `security` section, select enabled for both `Encyrption at rest` and `Encrption in transit`.  
+  - For `access control` choose `Redis Auth default user access` and enter an appropriate password; this should be the same password that you used in the primary region.
+- In the `Selected security groups`, select a an existing security group; you may need to later update the inbound traffic rules to allow inbound traffic on port 6379.
+- You can disable backups if you wish.  
+- Click `next` then hit `create`.
 
 
-After the secondary cluster is available, go back to the Global datastores list click on the name of your newly created datastore.  Click on the primary
-cluster and find the `Primary endpoint` field under `Cluster details`, you will need this in the `host` field of the primary redis secret.  
-Click your browser's back button and then click on the secondary cluster name.  Find the `Primary endpoint` field under `Cluster details`; 
+After the secondary cluster is available, go back to the Global datastores list click on the name of your newly created datastore.  
+
+- Click on the primary cluster and find the `Primary endpoint` field under `Cluster details`, you will need this in the `host` field of the primary redis secret.  
+
+Click your browser's back button and then click on the secondary cluster name.  
+- Find the `Primary endpoint` field under `Cluster details`; 
 you will need this in the `host` field of the secondary redis secret. 
 
 Using your editor of choice, update the fields with <> placeholders in the `amazonRedisPrimary.yaml` and `amazonRedisSecondary.yaml` files 
