@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+data:
+  host: <cache name>
+  password: <cache password>
+  port: NjM3OQ== # 6379
+  provider: YXdz  # aws
+  type: cmVkaXM= # redis
+kind: Secret
+metadata:
+  name: cache-where-for-dinner-region-2
+type: connection.crossplane.io/v1alpha1
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: cache-where-for-dinner
+spec:
+  ref:
+    apiVersion: v1
+    kind: Secret
+    name: cache-where-for-dinner-region-2

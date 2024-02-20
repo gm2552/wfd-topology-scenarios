@@ -1,7 +1,7 @@
 # Multi Region, Active/Passive
 
 
-This scenario consists of a multipe run clusters spanning across two regions with services running in various HA configurations.  Both regions host
+This scenario consists of multiple run clusters spanning across two regions with services running in various HA configurations.  Both regions host
 a fully functioning instance of the Where For Dinner application, however only one region actively serves traffic at any given time.  Each region
 keeps its own copy of stateful data, and data is replicated from the active region to the passive region in near real time.  Services will deployed
 in AWS and use global/replication configuration.
@@ -177,6 +177,10 @@ kubectl apply -f multi-region-active-passive/amazonRedisSecondary.yaml -n <names
 Create a single replica RabbitMQ instance by running the following 
 command from the root of the `scenarios` directory substituting the <namepspace> placeholder with your run namespace (if applicable):
 
+```
+kubectl apply -f multi-region-active-passive/rabbitMQ.yaml -n <namespace>
+```
+
 ### Deploy Workloads
 
 Deploy the workloads by running the following command:
@@ -185,9 +189,7 @@ Deploy the workloads by running the following command:
 kubectl apply -f multi-region-active-passive/package-install
 ```
 
-```
-kubectl apply -f multi-region-active-passive/rabbitMQ.yaml -n <namespace>
-```
+
 ## Failover Test
 
 Failover testing consists of promoting the Redis and Postgres instances in the secondary cluster to become the primary instances.  The general flow of this test consists

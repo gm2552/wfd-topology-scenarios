@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+data:
+  database: <db name>
+  host: <db host>
+  password: <db password>
+  port: NTQzMg== # 5432
+  provider: YXdz  # aws
+  type: cG9zdGdyZXNxbA==  # postgresql
+  username: <db username>
+kind: Secret
+metadata:
+  name: db-where-for-dinner-region-1
+type: connection.crossplane.io/v1alpha1
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: db-where-for-dinner-region-1
+spec:
+  ref:
+    apiVersion: v1
+    kind: Secret
+    name: db-where-for-dinner
