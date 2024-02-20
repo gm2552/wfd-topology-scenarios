@@ -53,7 +53,7 @@ passive region.  Make sure you are in the correct region when you perform the op
 #### Postgres Service Creation
 
 To create a primary Postgres cluster:
-- search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 
+- Search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 
 - Click the `Create database` button, select `Standard create`, and select `Aurora (PosgreSQL Compatible)`; do NOT select PostgreSQL option.
 - Select "Dev/Test" as the template.
 - Give the `DB cluster identifier` a name of your choice, and supply a master username and password in `Credential Settings`. 
@@ -185,7 +185,6 @@ Deploy the workloads by running the following command:
 kubectl apply -f multi-region-active-passive/package-install
 ```
 
-
 ```
 kubectl apply -f multi-region-active-passive/rabbitMQ.yaml -n <namespace>
 ```
@@ -194,10 +193,58 @@ kubectl apply -f multi-region-active-passive/rabbitMQ.yaml -n <namespace>
 Failover testing consists of promoting the Redis and Postgres instances in the secondary cluster to become the primary instances.  The general flow of this test consists
 of the following:
 
-- Fail over Postgres
-- Fail over Redis
+- Failover Postgres
+- Failover Redis
+- Restart Services
 - Switch GSLB to point to route traffic to the passive cluster
 - Test the WFD application.
 
 *Test Steps Coming Soon*
 
+### Failover Postgres
+
+To failover to the postgres instance, execute the following steps.
+
+- Search for RDS in the AWS Web Console and click `RDS`. 
+- Load the list of databases by clicking `Databases` from the navigation menu on the left side of the screen.
+- Select the radio button next to the database/cluster that you want to failover.
+- Click on the `Actions` dropdown menu and the click `Switch over or fail over global database`
+- Choose `Failover (allow data loss)` and select the secondary cluster in the `New primary cluster` drop down.
+- Confirm the faileover and Click `Confirm`
+
+After a few minutes or less, the secondary cluster will become the primary cluster.  You can validate this by viewing the list of databases and ensuring that the previous 
+secondary cluster now has a role of `Primary Cluster`.
+
+### Failover Redis
+
+- Search for ElastiCache in the AWS Web Console and click `ElastiCache` 
+- Click `Global datastores` on the left side navigation menu to load the list of global databases.
+- Click on the datastore that you want to failover.
+- Select the radio button next the secondary cluster, then click `Promote to primary`
+- Click `Promote` to confirm.
+
+After few minutes or less, the secondary cluster will become the primary cluster.  You can validate this by reloading the list of `Regional Redis Clusters` for your selectect data store
+and ensuring that the previous secondary cluster now has a role of `Primary`.
+
+### Restart Services
+
+The fail over requires the standby services to be restarted.
+Restart the following Where For Dinner workload by killing their pods.
+
+- `where-for-dinner-search`
+- `where-for-dinner-search-proc`
+- `where-for-dinner-availability`
+
+### Switchover GSLB
+
+Using the appropriate GSLB tooling, switch traffic routing from the availability targets in the active region to now flow to availability targets in the passive/standby region.
+
+**NOTE** It is currently unknown how to route traffic to a specific set of availability targets in TAP SaaS.
+
+### Test Application
+
+To test that the Where For Dinner application has been failed over appropriately, execute the following steps: 
+
+- Load the Where For Dinner application instance in your browser and validate that the application loads.
+- Create a new search in the seach `Submit Search Information` form and click `Submit Seacch`
+- Validate that the new search appears under the list of `Submitted Searches And Results`
