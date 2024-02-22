@@ -9,6 +9,9 @@ This scenario uses AWS RDS  spin up postgres cluster; how will need access to an
 
 ## Deploy Services And Workload
 
+**NOTE**  It is optimal that you create the service instances in the same region where the availability targets are located.  
+Make sure you are in the correct region when you perform the operations below.
+
 ### Create RDS Postgres Database and Proxy
 
 To create a Postgres instance, search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 

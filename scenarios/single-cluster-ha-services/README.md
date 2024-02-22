@@ -2,7 +2,7 @@
 
 
 This scenario consists of a single run cluster with services running in various HA configurations.  It breaks down into 
-sub scenarios to demostrate different HA configuration and failover options.
+sub scenarios to demonstrate different HA configuration and failover options.
 
 ## Prerequisites
 

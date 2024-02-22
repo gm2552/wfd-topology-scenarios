@@ -53,7 +53,7 @@ kubectl apply -f common-config/scgRoutes.yaml -n <namespace>
 
 ### Create Service Instances
 
-**NOTE**  It is optimal if you create the service instances in the same region where the availability targets are located.  
+**NOTE**  It is optimal that you create the service instances in the same region where the availability targets are located.  
 Make sure you are in the correct region when you perform the operations below.
 
 #### Create RDS Postgres Database
