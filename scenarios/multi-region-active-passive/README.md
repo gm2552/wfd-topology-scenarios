@@ -90,8 +90,7 @@ After the secondary cluster is available, go back to the RDS databases and list 
 - Scroll down the `Endpoints` section and make note of the endpoint with the type `writer` as this will be host field in your credentials file for the secondary region.
 
 Using your editor of choice, update the fields with <> placeholders in the `amazonAuroraSecondary.yaml` file in the `scenarios/multi-region-active-passive` folder
-of this repository with the credentials and connection information for the Postgres primary cluster. You will need to base64 encode each secret/credential value 
-before adding it to the `amazonAurora.yaml` file; an easy way to base64 values is to use an online tool such as https://www.base64encode.org.
+of this repository with the credentials and connection information for the Postgres secondary cluster. 
 
 Finally, apply the credential information to the primary and secondary clusters by running the following 
 command from the root of the `scenarios` directory substituting the <namepspace> placeholder with your run namespace (if applicable):

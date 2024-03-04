@@ -50,4 +50,4 @@ Each one of the sub scenarios should be considered a unique deployment of the wh
 
 
 - [Cross Region Read/Write](cross-region-read-write.md)
-- [Write Forward](write-forward.md)
+- [Write Forward](cross-region-write-forward.md)

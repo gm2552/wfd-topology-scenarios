@@ -75,7 +75,7 @@ After the databases have been created and are available, click on the database i
 Note the endpoint as this will be used in the host field in the next section.  **NOTE** Each region will have a different endpoint.
 
 Using your editor of choice, update the fields with <> placeholders in the `amazonAuroraRegion1.yaml` and `amazonAuroraRegion2.yaml` files in the 
-`scenarios/multi-region-partitioned-data folder of this repository with the credentials and connection information for the Postgres end point.
+`scenarios/multi-region-partitioned-data` folder of this repository with the credentials and connection information for the Postgres endpoint.
 Make sure each file contains the endpoint for the correct region.
 You will need to base64 encode each secret/credential value 
 before adding it to each credentials file; an easy way to base64 values is to use an online tool such as https://www.base64encode.org.

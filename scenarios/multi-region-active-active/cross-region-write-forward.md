@@ -1,0 +1,180 @@
+# Cross Region Write Forward
+
+This sub scenario implements an Aurora Global Postgres database across both regions.  The primary read/write instance resides in 
+`region-1` whilst the instance in `region-2` is a read only replica of the primary with write-forwarding enabled.  
+
+From a configuration perspective, workloads will connect to a local endpoint for both read write and read only operations.
+Because only one region can hold the primary read/write instance at any given time, the postgres instance in the secondary region
+will forward write transactions to the primary replica over the AWS backbone.  
+
+
+## Deploy Services And Workload
+
+**NOTE**  It is optimal that you create the service instances in the same region where the availability targets are located.  
+Make sure you are in the correct region when you perform the operations below.
+
+### Create RDS Postgres Database
+
+To create the primary Postgres cluster:
+
+- Search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 
+- Click the `Create database` button, select `Standard create`, and select `Aurora (PosgreSQL Compatible)`; do NOT select PostgreSQL option.
+- Select "Dev/Test" as the template.
+- Give the `DB cluster identifier` a name of your choice, and supply a master username and password in `Credential Settings`. 
+- For "Instance configuration", select a size in the `Memory optimized classes` class; `db.r5.large` is appropriate. 
+- Under `Availability & durability`, select `Create an Aurora Replica or Reader node in a different AZ.`
+- Under `Connectivity`, chose `Yes` for `Public access`.  
+- Under `Read replica write forwarding`, enable write forwarding.
+- You can turn off performance insights under `Monitoring` if you wish. 
+- Under `Additional configuration`, provide an `Initial database name` such as `dinner`; 
+- You can disable backups as well if you wish.
+- Click `Create database`.
+
+After the databases have been created and are available, click on the database instance from the list of databases and scroll down to the `Connectivity & security` section. 
+Note the endpoint as this will be used in the host field in the next section.  **NOTE** Each region will have a different endpoint.
+
+Using your editor of choice, update the fields with <> placeholders in the `amazonWriteForwardAuroraPrimary.yaml` 
+file in the  `scenarios/multi-region-active-active` folder of this repository with the credentials and connection information for the Postgres endpoint.
+Make sure each file contains the endpoint for the correct region.
+You will need to base64 encode each secret/credential value 
+before adding it to each credentials file; an easy way to base64 values is to use an online tool such as https://www.base64encode.org.
+
+To create the secondary cluster: 
+- Select the primary database cluster from the database list in the AWS console (this should be the cluster you just created).
+- Click on the `Actions` drop down and then click `Add AWS region.`  
+- Enter a name of your choice for the `Global database identifier` and then choose the region where your
+passive/standby clusters are located.   
+- For `Instance configuration`, select a size in the `Memory optimized classes` class; `db.r5.large` is appropriate. 
+- Under `Availability & durability`, select `Create an Aurora Replica or Reader node in a different AZ.`  
+- Under `Connectivity`, chose `Yes` for `Public access`.  
+- Under `Read replica write forwarding`, enable write forwarding.
+- Under `Additional configuration`, provide an `Initial database name` such as `dinner`
+- You can turn off performance insights and backups as well if you wish.
+- Finally, click `Add region`.
+
+After the secondary cluster is available, go back to the RDS databases and list click on the DB identifier that has a role of `Secondard Cluster`.  
+- Scroll down the `Endpoints` section and make note of the endpoint with the type `writer` as this will be host field in your credentials file for the secondary region.
+
+Using your editor of choice, update the fields with <> placeholders in the `amazonWriteForwardAuroraSecondary.yaml` file in the `scenarios/multi-region-active-active` folder
+of this repository with the credentials and connection information for the Postgres secondary cluster. 
+
+Finally, apply the credential information to the primary and secondary clusters by running the following 
+command from the root of the `scenarios` directory substituting the <namepspace> placeholder with your run namespace (if applicable):
+
+**TAP SM**
+Run on the primary region cluster
+
+```
+kubectl apply -f multi-region-active-active/amazonWriteForwardAuroraPrimary.yaml -n <namespace>
+```
+
+Run on the secondary region cluster
+
+```
+kubectl apply -f multi-active-active-passive/amazonWriteForwardAuroraSecondary.yaml -n <namespace>l
+```
+
+**TAP SaaS**
+
+*TODO* Unknown how to do on TAP SaaS
+
+
+#### RabbitMQ Service Creation
+
+To create a RabbitMQ instance, perform the following steps in each region:
+
+- Search for AmazonMQ in the AWS Web Console and click `Amazon MQ` to load the Amazon ElastiCache dashboard. 
+- Click `Brokers` on the left side navigation menu,  then click the `Create brokers` button.
+- Select `RabbitMQ` as the engine type and click `Next`.
+- Select `Cluster deployment` and click `next`.
+- Enter a name of your choosing in the Details `Broker name` field.
+- In the `RabbitMQ access section`, enter a username and password.  You will need these later on when filling out the `username` and  `password` field of the secrets.
+- In the `Additional settings` section, you can disable the maintenance window if you wish.  
+- Click `next` then click `Create broker`
+
+
+After the both broker instances are available, go back to the `Brokers` list and click on the name of your newly created broker.  Scroll down to the `Connections`
+section and find the AMQP endpoint name.  Note the endpoint as this will be used in the addresses field in the next section.  **NOTE** Each region will have a different endpoint.
+
+Using your editor of choice, update the fields with <> placeholders in the `amazonRabbitMQRegion1.yaml` and `amazonRabbitMQRegion2.yaml` files in the 
+`scenarios/multi-region-active-active` folder of this repository with the credentials and connection information for the RabbitMQ end point.
+Make sure each file contains the endpoint for the correct region.
+You will need to base64 encode each secret/credential value 
+before adding it to each credentials file; an easy way to base64 values is to use an online tool such as https://www.base64encode.org.
+
+Finally, apply the credential information to the cluster by running the following 
+command from the root of the `scenarios` directory substituting the <namepspace> placeholder with your run namespace (if applicable):
+
+
+**TAP SM**
+Run on the first region's cluster
+
+```
+kubectl apply -f multi-region-active-active/amazonRabbitMQRegion1.yaml -n <namespace>
+```
+
+Run on the second region's cluster
+
+```
+kubectl apply -f multi-region-active-active/amazonRabbitMQRegion2.yaml -n <namespace>
+```
+
+**TAP SaaS**
+
+*TODO* Unknown how to do on TAP SaaS
+
+
+#### Redis Service Creation
+
+**TODO:** Need an active/active cross region solution for Redis.
+
+AWS does not currently support an active/active option for Redis even if connecting to the primary instance across regions (Redis instances only allow connections from 
+within the same VPC).  For now, the Redis instance for the active/active scenario will use separate instances as this will have minimal impact on the Where For Dinner
+application.
+
+Create a single Redis instance by running the following command from the root of the `scenarios` directory substituting the <namepspace> placeholder 
+with your run namespace (if applicable); if running in a non-Spaces environment, run the command against clusters in both regions.
+
+```
+kubectl apply -f multi-region-active-active/rabbitMQ.yaml -n <namespace>
+```
+
+### Deploy Workloads
+
+Deploy the workloads by running the following command; if running in a non-Spaces environment, run the command against clusters in both regions.
+
+```
+kubectl apply -f multi-region-active-active/package-install
+```
+
+## Failover Test
+
+Failover testing consists of promoting Postgres instances in the secondary cluster to become the primary instances.  The general flow of this test consists
+of the following:
+
+- Failover Postgres
+- Test the WFD application.
+
+### Failover Postgres
+
+To failover to the postgres instance, execute the following steps.
+
+- Search for RDS in the AWS Web Console and click `RDS`. 
+- Load the list of databases by clicking `Databases` from the navigation menu on the left side of the screen.
+- Select the radio button next to the database/cluster that you want to failover.
+- Click on the `Actions` dropdown menu and the click `Switch over or fail over global database`
+- Choose `Switchover` and select the secondary cluster in the `New primary cluster` drop down.
+- Confirm the faileover and Click `Confirm`
+
+After a few minutes (possibly 5 or more depending on amount of data in the database and load), the secondary cluster will become the primary cluster.  
+You can validate this by viewing the list of databases and ensuring that the previous secondary cluster now has a role of `Primary Cluster`.
+
+### Test Application
+
+**TODO:** Update testing to validate connectivity of the `search` and `availability` workloads in both regions.
+
+To test that the Where For Dinner application has been failed over appropriately, execute the following steps: 
+
+- Load the Where For Dinner application instance in your browser and validate that the application loads.
+- Create a new search in the seach `Submit Search Information` form and click `Submit Seacch`
+- Validate that the new search appears under the list of `Submitted Searches And Results`
