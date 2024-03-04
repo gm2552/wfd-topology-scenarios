@@ -1,4 +1,4 @@
-# Multi Region, Active/Active, Partitioned Data
+# Multi Region, Active/Active, Shared Data
 
 
 This scenario consists of multiple run clusters spanning across two regions with services running in various HA configurations.  Both regions host
