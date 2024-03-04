@@ -8,7 +8,7 @@ data:
   username: <broker username>
 kind: Secret
 metadata:
-  name: msgbroker-where-for-dinner-region-2
+  name: msgbroker-where-for-dinner-region-1
 type: connection.crossplane.io/v1alpha1
 ---
 apiVersion: services.apps.tanzu.vmware.com/v1alpha1
@@ -19,4 +19,4 @@ spec:
   ref:
     apiVersion: bitnami.messaging.tanzu.vmware.com/v1alpha1
     kind: RabbitmqCluster
-    name: msgbroker-where-for-dinner-region-2
+    name: msgbroker-where-for-dinner-region-1

@@ -53,7 +53,7 @@ kubectl apply -f common-config/scgRoutes.yaml -n <namespace>
 
 ### Create Service Instances
 
-**NOTE**  It is optimal that you create the service instances in the same region where the availability targets are located.  
+**NOTE:**  It is optimal that you create the service instances in the same region where the availability targets are located.  
 Make sure you are in the correct region when you perform the operations below.
 
 #### Create RDS Postgres Database
@@ -198,7 +198,7 @@ kubectl apply -f multi-region-partitioned-data/amazonRabbitMQRegion2.yaml -n <na
 
 ### Deploy Workloads
 
-Deploy the workloads by running the following command:
+Deploy the workloads by running the following command; if running in a non-Spaces environment, run the command against clusters in both regions.
 
 ```
 kubectl apply -f multi-region-partitioned-data/package-install

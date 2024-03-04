@@ -47,12 +47,13 @@ kubectl apply -f common-config/scgRoutes.yaml -n <namespace>
 
 ### Create Replicated Postgres and Redis Instances
 
-**NOTE**  It is optimal if you create the primary service replicas/cluster in your initial active region and the secondary replicas/cluster in your
-passive region.  Make sure you are in the correct region when you perform the operations below.
+**NOTE**  It is optimal that you create the service instances in the same region where the availability targets are located.  
+Make sure you are in the correct region when you perform the operations below.
 
 #### Postgres Service Creation
 
-To create a primary Postgres cluster:
+To create the primary Postgres cluster:
+
 - Search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 
 - Click the `Create database` button, select `Standard create`, and select `Aurora (PosgreSQL Compatible)`; do NOT select PostgreSQL option.
 - Select "Dev/Test" as the template.
@@ -62,15 +63,15 @@ To create a primary Postgres cluster:
 - Under `Connectivity`, chose `Yes` for `Public access`.  
 - You can turn off performance insights under `Monitoring` if you wish. 
 - Under `Additional configuration`, provide an `Initial database name` such as `dinner`; 
-- You can disable backups as well if you wish. Finally, 
+- You can disable backups as well if you wish.
 - Click `Create database`.
+
+After the primary cluster is available, go back to the RDS databases list and click on the DB identifier that has a role of `Regional cluster`.  Scroll down the `Endpoints`
+section and make note of the endpoint with the type `writer` as this will be host field in your credentials file for the primary region.
 
 Using your editor of choice, update the fields with <> placeholders in the `amazonAuroraPrimary.yaml` file in the `scenarios/multi-region-active-passive` folder
 of this repository with the credentials and connection information for the Postgres primary cluster. You will need to base64 encode each secret/credential value 
 before adding it to the `amazonAurora.yaml` file; an easy way to base64 values is to use an online tool such as https://www.base64encode.org.
-
-After the primary cluster is available, go back to the RDS databases list and click on the DB identifier that has a role of `Regional cluster`.  Scroll down the `Endpoints`
-section and make note of the endpoint with the type `writer` as this will be host field in your credentials file for the primary region.
 
 
 To create the secondary cluster: 
@@ -92,7 +93,7 @@ Using your editor of choice, update the fields with <> placeholders in the `amaz
 of this repository with the credentials and connection information for the Postgres primary cluster. You will need to base64 encode each secret/credential value 
 before adding it to the `amazonAurora.yaml` file; an easy way to base64 values is to use an online tool such as https://www.base64encode.org.
 
-Finally, apply the credential information to the primary and secondary cluster by running the following 
+Finally, apply the credential information to the primary and secondary clusters by running the following 
 command from the root of the `scenarios` directory substituting the <namepspace> placeholder with your run namespace (if applicable):
 
 **TAP SM**
@@ -174,8 +175,8 @@ kubectl apply -f multi-region-active-passive/amazonRedisSecondary.yaml -n <names
 
 #### RabbitMQ Service Creation
 
-Create a single replica RabbitMQ instance by running the following 
-command from the root of the `scenarios` directory substituting the <namepspace> placeholder with your run namespace (if applicable):
+Create a single replica RabbitMQ instance by running the following command from the root of the `scenarios` directory substituting the <namepspace> placeholder 
+with your run namespace (if applicable); if running in a non-Spaces environment, run the command against clusters in both regions.
 
 ```
 kubectl apply -f multi-region-active-passive/rabbitMQ.yaml -n <namespace>
@@ -183,7 +184,7 @@ kubectl apply -f multi-region-active-passive/rabbitMQ.yaml -n <namespace>
 
 ### Deploy Workloads
 
-Deploy the workloads by running the following command:
+Deploy the workloads by running the following command; if running in a non-Spaces environment, run the command against clusters in both regions.
 
 ```
 kubectl apply -f multi-region-active-passive/package-install
@@ -197,11 +198,9 @@ of the following:
 
 - Failover Postgres
 - Failover Redis
-- Restart Services
 - Switch GSLB to point to route traffic to the passive cluster
 - Test the WFD application.
 
-*Test Steps Coming Soon*
 
 ### Failover Postgres
 
@@ -211,11 +210,11 @@ To failover to the postgres instance, execute the following steps.
 - Load the list of databases by clicking `Databases` from the navigation menu on the left side of the screen.
 - Select the radio button next to the database/cluster that you want to failover.
 - Click on the `Actions` dropdown menu and the click `Switch over or fail over global database`
-- Choose `Failover (allow data loss)` and select the secondary cluster in the `New primary cluster` drop down.
+- Choose `Switchover` and select the secondary cluster in the `New primary cluster` drop down.
 - Confirm the faileover and Click `Confirm`
 
-After a few minutes or less, the secondary cluster will become the primary cluster.  You can validate this by viewing the list of databases and ensuring that the previous 
-secondary cluster now has a role of `Primary Cluster`.
+After a few minutes (possibly 5 or more depending on amount of data in the database and load), the secondary cluster will become the primary cluster.  
+You can validate this by viewing the list of databases and ensuring that the previous secondary cluster now has a role of `Primary Cluster`.
 
 ### Failover Redis
 
@@ -225,17 +224,9 @@ secondary cluster now has a role of `Primary Cluster`.
 - Select the radio button next the secondary cluster, then click `Promote to primary`
 - Click `Promote` to confirm.
 
-After few minutes or less, the secondary cluster will become the primary cluster.  You can validate this by reloading the list of `Regional Redis Clusters` for your selectect data store
-and ensuring that the previous secondary cluster now has a role of `Primary`.
+After few minutes or less, the secondary cluster will become the primary cluster.  You can validate this by reloading the list of `Regional Redis Clusters` for your 
+selected data store and ensuring that the previous secondary cluster now has a role of `Primary`.
 
-### Restart Services
-
-The fail over requires the standby services to be restarted.
-Restart the following Where For Dinner workload by killing their pods.
-
-- `where-for-dinner-search`
-- `where-for-dinner-search-proc`
-- `where-for-dinner-availability`
 
 ### Switchover GSLB
 

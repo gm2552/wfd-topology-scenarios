@@ -1,17 +1,17 @@
 apiVersion: data.packaging.carvel.dev/v1alpha1
 kind: Package
 metadata:
-  name: where-for-dinner-search.workloads.tap.20240206000432.0.0
+  name: where-for-dinner-search.workloads.tap.20240222140703.0.0
 spec:
   refName: where-for-dinner-search.workloads.tap
-  version: 20240206000432.0.0
+  version: 20240222140703.0.0
   releaseNotes: |
-    Release v20240206000432.0.0 of package where-for-dinner-search.workloads.tap
+    Release v20240222140703.0.0 of package where-for-dinner-search.workloads.tap
   template:
     spec:
       fetch:
       - imgpkgBundle:
-          image: reg.perfect300rock.com/tapdev/supply-chain/where-for-dinner-search-workloads-bundle@sha256:f0c1104e55a6db5403eb297c4b9f2b60f89659febf8d689428e920521b4789af
+          image: reg.perfect300rock.com/tapdev/supply-chain/where-for-dinner-search-workloads-bundle@sha256:7d5a80417b58da56a8c2a64cb2c4e1bc5240bbdd9a3297df0cdbb95734f4f505
       template:
       - ytt:
           paths:

@@ -14,15 +14,18 @@ Make sure you are in the correct region when you perform the operations below.
 
 ### Create RDS Postgres Database and Proxy
 
-To create a Postgres instance, search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 
-Click the `Create database` button, select `Standard create`, and select `PostgreSQL`; do NOT select the Aurora PostgreSQL option.
-Select "Dev/Test" as the template, and select `Multi-AZ DB instance` the option.  
-Give the `DB instance identifier` a name of your choice, and supply a master username and password in "Credential Settings". 
-For "Instance configuration", select a smaller size in the `Burstable classes` class; `db.t4g.large` is appropriate. 
-Under `Connectivity`, chose `Yes` for `Public access` and select `Create an RDS Proxy`.  Also, ensure that the selected VPC is the same VPC
+To create a Postgres instance
+- Search for RDS in the AWS Web Console and click `RDS` to load the Amazon RDS dashboard. 
+- Click the `Create database` button, select `Standard create`, and select `PostgreSQL`; do NOT select the Aurora PostgreSQL option.
+- Select "Dev/Test" as the template, and select `Multi-AZ DB instance` the option.  
+- Give the `DB instance identifier` a name of your choice, and supply a master username and password in "Credential Settings". 
+- For `Instance configuration`, select a smaller size in the `Burstable classes` class; `db.t4g.large` is appropriate. 
+- Under `Connectivity`, chose `Yes` for `Public access` and select `Create an RDS Proxy`.  Also, ensure that the selected VPC is the same VPC
 as your cluster (proxies are not accessible across VCPs).  You may need to update the selected security group to allow inbound traffic on port 5432.
-You can turn off performance insights if you wish. Under `Additional configuration`, provide an `Initial database name` such as `dinner`; 
-you can disable backups as well if you wish. Finally, click `Create database`.
+- You can turn off performance insights if you wish. 
+- Under `Additional configuration`, provide an `Initial database name` such as `dinner`; 
+- You can disable backups as well if you wish. 
+- Click `Create database`.
 
 After the database has been created and is available, click on the database instance from the list of databases and scroll down to the "Proxies" section. 
 Click on the `Proxy identifier` and scroll down to the `Proxy endpoints` section.  Note the endpoint this will be used as the host field in the next section.

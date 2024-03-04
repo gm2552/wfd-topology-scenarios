@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+data:
+  read-write.r2dbc-url: <rw db url> 
+  read-write.password: <rw db password> 
+  read-write.username: <rw db username> 
+  read-only.r2dbc-url: <ro db url> 
+  read-only.password: <ro db password> 
+  read-only.username: <ro db username> 
+  provider: YXdz  # aws
+  type: cG9zdGdyZXNxbC1yZXBsaWNhdGVk  # postgresql-replciated
+kind: Secret
+metadata:
+  name: db-where-for-dinner-region-1
+type: connection.crossplane.io/v1alpha1
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: db-where-for-dinner
+spec:
+  ref:
+    apiVersion: v1
+    kind: Secret
+    name: db-where-for-dinner-region-1

@@ -1,17 +1,17 @@
 apiVersion: data.packaging.carvel.dev/v1alpha1
 kind: Package
 metadata:
-  name: where-for-dinner-notify.workloads.tap.20240206000432.0.0
+  name: where-for-dinner-notify.workloads.tap.20240222140811.0.0
 spec:
   refName: where-for-dinner-notify.workloads.tap
-  version: 20240206000432.0.0
+  version: 20240222140811.0.0
   releaseNotes: |
-    Release v20240206000432.0.0 of package where-for-dinner-notify.workloads.tap
+    Release v20240222140811.0.0 of package where-for-dinner-notify.workloads.tap
   template:
     spec:
       fetch:
       - imgpkgBundle:
-          image: reg.perfect300rock.com/tapdev/supply-chain/where-for-dinner-notify-workloads-bundle@sha256:0559430a47b7ca5cbd48c0431f66de3646e9b71f50305a5dffbff2913193fee5
+          image: reg.perfect300rock.com/tapdev/supply-chain/where-for-dinner-notify-workloads-bundle@sha256:fb4617ea3c137a9cf6cdb4d8012d446dd7154e2449174c6ff8fe9684ac54932a
       template:
       - ytt:
           paths:
